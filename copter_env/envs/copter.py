@@ -9,25 +9,62 @@ class CopterEnv(gym.Env):
 
     def __init__(self):
         print('init world')
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        if os.path.exists(dir_path + '/data/world.jpg'):
-            self.worldImagePath = os.path.exists(dir_path + '/data/world.jpg')
+        path = os.path.dirname(os.path.realpath(__file__)) + '/data/world.jpg'
+        if os.path.exists(path):
+            self.worldImagePath = path
             print('World is loaded')
         else:
             raise IOError()
 
+        self.viewer = None
+
 
     def step(self, action):
-        print('step')
+        o = self.env.getSonarData()
+        r = 0
+        if self.env.ship.isOnLand():
+            r -= 10
+        if not self.env.checkShipIsDead():
+            r += 1
+        else:
+            r -= 1000
+        r += self.env.ship.speed * 3
+
+        d = self.env.checkShipIsDead() or self.env.chechIsComplete()
+
+        self.env.step(action)
+
+        return (o, r, d, {})
 
 
     def reset(self):
-        print('reset')
+
+        self.env = Environment(self.worldImagePath)
+        return self.env.getSonarData()
 
 
-    def render(self, mode='human'):
-        print('render')
+    def render(self, mode='human', close=False):
+        if close:
+            if self.viewer is not None:
+                self.viewer.close()
+                self.viewer = None
+            return
+
+        if mode == 'rgb_array':
+            return self.env.to_rgb()
+
+        elif mode == 'human':
+            from gym.envs.classic_control import rendering
+            if self.viewer is None:
+                self.viewer = rendering.SimpleImageViewer()
+            self.viewer.imshow(self.env.to_rgb()[:, :, ::-1])
+            return self.viewer.isopen
+
+        else:
+            assert 0, "Render mode '%s' is not supported" % mode
 
 
     def close(self):
-        print('close')
+        self.viewer.close()
+
+
