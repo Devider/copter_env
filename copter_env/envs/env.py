@@ -67,6 +67,7 @@ class Ship:
         if not self.__onLand:
             self.__x = int(self.__x + self.speed * math.cos(self.__azimuth * math.pi / 180) + 0.5)
             self.__y = int(self.__y + self.speed * math.sin(self.__azimuth * math.pi / 180) + 0.5)
+        return self.__x, self.__y
 
     def draw(self, world):
         for i in range(3):
@@ -87,9 +88,10 @@ class Ship:
 
 class Environment:
     ROOM = 0
-    WALL = 1
-    START = 2
-    FINISH = 3
+    VISITED = 1
+    WALL = 2
+    START = 4
+    FINISH = 5
 
     COL_MAP = {
         ROOM: [255, 255, 255],
@@ -122,6 +124,9 @@ class Environment:
         x, y = self.ship.position
         return self.__env[x, y] == Environment.WALL
 
+    def checkIsVisired(self):
+        x, y = self.ship.position
+        return self.__env[x, y] == Environment.VISITED
 
     def chechIsComplete(self):
         return self.__env[self.ship.x, self.ship.y] == Environment.FINISH
@@ -141,6 +146,8 @@ class Environment:
             self.ship.takeOff()
         else:
             self.ship.toLand()
+        x, y = self.ship.position
+        self.__env[(x-1):(x+1), (y-1):(y+1)] = Environment.VISITED
         self.ship.fly()
 
     def getSonarData(self):
