@@ -130,14 +130,14 @@ class Environment:
 
     def step(self, action):
         '''
-        action[0] - рысканье
-        action[1] - скорость
+        action[0] - скорость
+        action[1] - рысканье
         все [0..1]
         '''
 
         self.ship.yaw = clip(action[0], 1, -1)
         self.ship.speed = action[1] * 5
-        if action[2] > 0.5:
+        if action[2] >= 0.5:
             print('tacking off')
             self.ship.takeOff()
         else:
