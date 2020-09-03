@@ -37,9 +37,9 @@ class CopterEnv(gym.Env):
         r = -1
         if self.env.ship.isOnLand():
             r -= 10
-        elif self.env.chechIsComplete():
+        if self.env.chechIsComplete():
             r += 1000
-        else:
+        if self.env.checkShipIsDead():
             r -= 1000
         r += self.env.ship.speed - 2
 
