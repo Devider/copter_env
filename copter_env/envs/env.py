@@ -1,7 +1,32 @@
-import numpy as np
 import math
-from copter_env.envs.utils import clip, concat_angles, createEnvironmentFromImage
 import matplotlib.pyplot as plt
+import numpy as np
+
+
+def clip(v, v_max, v_min=0):
+    return max(min(v, v_max), v_min)
+
+
+def concat_angles(angle1, angle2):
+    return (angle1 + angle2) % 360;
+
+
+def distance(x1, y1, x2, y2):
+    deltaX = x1 - x2
+    deltaY = y1 - y2
+    return math.sqrt(math.pow(deltaX, 2) + math.pow(deltaY, 2));
+
+def createEnvironmentFromImage(file):
+    im = plt.imread(file)
+    x, y, _ = im.shape
+
+    env = np.zeros((x, y))
+    for x_ in range(x):
+        for y_ in range(y):
+            env[x_, y_] = Environment.ROOM if im[x_, y_, :].mean() > 30 else Environment.WALL
+
+    env[(x - 80):(x - 20), (y - 80):(y - 20)] = Environment.FINISH
+    return env
 
 class Ship:
     SONAR_ANGELS = [-90, -30, 0, 30, 90]
@@ -90,13 +115,12 @@ class Environment:
     ROOM = 0
     VISITED = 1
     WALL = 2
-    START = 4
-    FINISH = 5
+    FINISH = 3
 
     COL_MAP = {
         ROOM: [255, 255, 255],
+        VISITED: [200, 200, 200],
         WALL: [0, 0, 0],
-        START: [30, 200, 10],
         FINISH: [200, 10, 10],
     }
 
@@ -124,7 +148,7 @@ class Environment:
         x, y = self.ship.position
         return self.__env[x, y] == Environment.WALL
 
-    def checkIsVisired(self):
+    def checkIsVisited(self):
         x, y = self.ship.position
         return self.__env[x, y] == Environment.VISITED
 

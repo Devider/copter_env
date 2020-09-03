@@ -42,7 +42,7 @@ class CopterEnv(gym.Env):
             r += 1000
         if self.env.checkShipIsDead():
             r -= 1000
-        if self.env.checkIsVisired():
+        if self.env.checkIsVisited():
             r -= 10
 
         d = self.env.checkShipIsDead() or self.env.chechIsComplete()
