@@ -34,6 +34,7 @@ class CopterEnv(gym.Env):
 
 
     def step(self, action):
+        print('Action received', action)
         o = self.env.getSonarData()
         r = 0
         if self.env.ship.isOnLand():
