@@ -80,6 +80,8 @@ class CopterEnv(gym.Env):
 
 
     def close(self):
-        self.viewer.close()
+        if self.viewer:
+            self.viewer.close()
+            self.viewer = None
 
 
