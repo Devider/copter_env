@@ -38,17 +38,17 @@ class CopterEnv(gym.Env):
 
         r = (self.env.ship.speed - 2) * 0.01
         if self.env.ship.isOnLand():
-            r -= 0.01
+            r -= 0.1
         if self.env.chechIsComplete():
             r += 1.
         if self.env.checkShipIsDead():
             r -= 1.
         if self.env.checkIsVisited():
-            r -= 0.01
+            r -= 0.1
 
         d = self.env.checkShipIsDead() or self.env.chechIsComplete()
-        print('Sonar data', o, 'reward', r, d)
-        print('Action received', action)
+        # print('Sonar data', o, 'reward', r, d)
+        # print('Action received', action)
 
         self.env.step(action)
         return o, r, d, {}
