@@ -5,11 +5,13 @@ from copter_env.envs.env import Environment
 import os
 import numpy as np
 
+
 class CopterEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
         path = os.path.dirname(os.path.realpath(__file__)) + '/data/world.jpg'
+        self.env = None
         if os.path.exists(path):
             self.worldImagePath = path
             print('World is loaded')
@@ -17,7 +19,7 @@ class CopterEnv(gym.Env):
             raise IOError()
 
         self.action_space = spaces.Box(
-            low=np.array( [0.,-30, 0]),
+            low=np.array([0., -30, 0]),
             high=np.array([5., 30, 1]),
             # shape=(3,),
             dtype=np.int32
@@ -31,11 +33,10 @@ class CopterEnv(gym.Env):
 
         self.viewer = None
 
-
     def step(self, action):
         o = self.env.getSonarData()
 
-        r = self.env.ship.speed - 2
+        r = self.env.ship.speed - 2 * 0.01
         if self.env.ship.isOnLand():
             r -= 0.01
         if self.env.chechIsComplete():
@@ -50,12 +51,10 @@ class CopterEnv(gym.Env):
         print('Action received', action)
 
         self.env.step(action)
-
-        return (o, r, d, {})
+        return o, r, d, {}
 
 
     def reset(self):
-
         self.env = Environment(self.worldImagePath)
         return self.env.getSonarData()
 
@@ -76,14 +75,10 @@ class CopterEnv(gym.Env):
                 self.viewer = rendering.SimpleImageViewer()
             self.viewer.imshow(self.env.to_rgb()[:, :, ::-1])
             return self.viewer.isopen
-
         else:
             assert 0, "Render mode '%s' is not supported" % mode
-
 
     def close(self):
         if self.viewer:
             self.viewer.close()
             self.viewer = None
-
-
