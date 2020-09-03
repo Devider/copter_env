@@ -122,6 +122,7 @@ class Environment:
         x, y = self.ship.position
         return self.__env[x, y] == Environment.WALL
 
+
     def chechIsComplete(self):
         return self.__env[self.ship.x, self.ship.y] == Environment.FINISH
 
