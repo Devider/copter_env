@@ -17,15 +17,16 @@ def distance(x1, y1, x2, y2):
     return math.sqrt(math.pow(deltaX, 2) + math.pow(deltaY, 2));
 
 def createEnvironmentFromImage(file):
-    im = plt.imread(file)
-    x, y, _ = im.shape
+    im = plt.imread(file).mean(axis=2)
+    x, y = im.shape
 
     env = np.zeros((x, y))
     for x_ in range(x):
         for y_ in range(y):
-            env[x_, y_] = Environment.ROOM if im[x_, y_, :].mean() > 30 else Environment.WALL
+            env[x_, y_] = 1 if im[x_, y_] > 30 else 2
 
-    env[(x - 80):(x - 20), (y - 80):(y - 20)] = Environment.FINISH
+    # env[(x - 80):(x - 20), (y - 80):(y - 20)] = 3
+    env[20:80, (y - 80):(y - 20)] = 3
     return env
 
 class Ship:
