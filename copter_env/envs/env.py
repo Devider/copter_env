@@ -51,7 +51,6 @@ class Ship:
 
     @yaw.setter
     def yaw(self, val):
-        print('skipping yaw', self.__onLand)
         if not self.__onLand:
             self.__azimuth = concat_angles(self.__azimuth , int(val*20))
 
@@ -65,7 +64,6 @@ class Ship:
         return self.__onLand
 
     def fly(self):
-        print('self.__onLand', self.__onLand)
         if not self.__onLand:
             self.__x = int(self.__x + self.speed * math.cos(self.__azimuth * math.pi / 180) + 0.5)
             self.__y = int(self.__y + self.speed * math.sin(self.__azimuth * math.pi / 180) + 0.5)
@@ -135,8 +133,9 @@ class Environment:
         все [0..1]
         '''
 
-        self.ship.yaw = clip(action[0], 1, -1)
-        self.ship.speed = action[1] * 5
+        self.ship.speed = int(action[0] * 5)
+        self.ship.yaw = action[1]
+
         if action[2] >= 0.5:
             print('tacking off')
             self.ship.takeOff()
@@ -153,9 +152,9 @@ class Environment:
                 x, y = self.__ship.position
                 x_ = int(x + i * math.cos(angle * math.pi / 180))
                 y_ = int(y + i * math.sin(angle * math.pi / 180))
-                if (self.__env[x_, y_] == Environment.WALL):
-                    continue
                 sonar_data[idx] = i
+                if (self.__env[x_, y_] == Environment.WALL):
+                    break
         return sonar_data
 
 

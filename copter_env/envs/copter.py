@@ -9,7 +9,6 @@ class CopterEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        print('init world')
         path = os.path.dirname(os.path.realpath(__file__)) + '/data/world.jpg'
         if os.path.exists(path):
             self.worldImagePath = path
