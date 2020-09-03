@@ -3,6 +3,7 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 from copter_env.envs.env import Environment
 import os
+import numpy as np
 
 class CopterEnv(gym.Env):
     metadata = {'render.modes': ['human']}
@@ -15,6 +16,19 @@ class CopterEnv(gym.Env):
             print('World is loaded')
         else:
             raise IOError()
+
+        self.action_space = spaces.Box(
+            low=np.array([-1.0, 0, 0]),
+            high=np.array([1, 1, 1]),
+            # shape=(3,),
+            dtype=np.float32
+        )
+        self.observation_space = spaces.Box(
+            low=0,
+            high=50,
+            shape=(5,),
+            dtype=np.int32,
+        )
 
         self.viewer = None
 
