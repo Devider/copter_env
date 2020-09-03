@@ -36,7 +36,7 @@ class CopterEnv(gym.Env):
     def step(self, action):
         o = self.env.getSonarData()
 
-        r = self.env.ship.speed - 2 * 0.01
+        r = (self.env.ship.speed - 2) * 0.01
         if self.env.ship.isOnLand():
             r -= 0.01
         if self.env.chechIsComplete():
