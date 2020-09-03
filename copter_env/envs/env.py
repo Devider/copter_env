@@ -23,7 +23,7 @@ def createEnvironmentFromImage(file):
     env = np.zeros((x, y))
     for x_ in range(x):
         for y_ in range(y):
-            env[x_, y_] = 1 if im[x_, y_] > 30 else 2
+            env[x_, y_] = 0 if im[x_, y_] > 30 else 2
 
     # env[(x - 80):(x - 20), (y - 80):(y - 20)] = 3
     env[20:80, (y - 80):(y - 20)] = 3
