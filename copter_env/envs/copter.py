@@ -17,10 +17,10 @@ class CopterEnv(gym.Env):
             raise IOError()
 
         self.action_space = spaces.Box(
-            low=np.array([-1.0, 0, 0]),
-            high=np.array([1, 1, 1]),
+            low=np.array( [0.,-30, 0]),
+            high=np.array([5., 30, 1]),
             # shape=(3,),
-            dtype=np.float32
+            dtype=np.int32
         )
         self.observation_space = spaces.Box(
             low=0,

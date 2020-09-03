@@ -43,7 +43,7 @@ class Ship:
 
     @speed.setter
     def speed(self, speed):
-        self.__speed = clip(speed, 1, -1) * 3
+        self.__speed = speed
 
     @property
     def yaw(self):
@@ -52,7 +52,7 @@ class Ship:
     @yaw.setter
     def yaw(self, val):
         if not self.__onLand:
-            self.__azimuth = concat_angles(self.__azimuth , int(val*20))
+            self.__azimuth = concat_angles(self.__azimuth , int(val))
 
     def takeOff(self):
         self.__onLand = False
@@ -133,14 +133,12 @@ class Environment:
         все [0..1]
         '''
 
-        self.ship.speed = int(action[0] * 5)
-        self.ship.yaw = action[1]
+        self.ship.speed = int(action[0])
+        self.ship.yaw = int(action[1])
 
         if action[2] >= 0.5:
-            print('tacking off')
             self.ship.takeOff()
         else:
-            print('standing')
             self.ship.toLand()
         self.ship.fly()
 
