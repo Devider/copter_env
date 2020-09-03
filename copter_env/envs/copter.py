@@ -41,7 +41,7 @@ class CopterEnv(gym.Env):
             r += 1
         else:
             r -= 1000
-        r += self.env.ship.speed * 3
+        r += self.env.ship.speed - 2
 
         d = self.env.checkShipIsDead() or self.env.chechIsComplete()
         print('Sonar data', o, 'reward', r, d)
